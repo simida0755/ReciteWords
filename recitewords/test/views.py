@@ -3,9 +3,9 @@ from django.views.generic.base import View
 from recitewords.spider.html_word_spider import SpiderWord
 
 
-class TestView(View):
-    def get(self,request):
-
+class WordView(View):
+    def get(self):
+        word = self.kwargs['word']
         spider = SpiderWord('lj:good')
 
         import json

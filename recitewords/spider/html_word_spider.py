@@ -27,13 +27,13 @@ YOUDAO_URL='https://openapi.youdao.com/api'
 APP_KEY='7bb52fcc9ffa80ca'
 APP_SECRET='az7qP5kpdTVRWj3Uk2ZaQCa9pskWQrmQ'
 
-
+#error-typo error-note
 
 class SpiderWord:
     # 类有职责自己去完成一次请求
 
     def __init__(self, word):
-        self.word = word
+        self.word = 'lj:{}'.format(word)
         self.youdao_html_url = YOUDAO_HTML_URL
 
         self.html = ''
@@ -43,11 +43,11 @@ class SpiderWord:
         self.phrases = []
         self.centences = []
 
-        self.spider_word(self.word)
+        self.spider_word()
         self.parse()
 
-    def spider_word(self,word):
-        url = self.youdao_html_url.format(word)
+    def spider_word(self):
+        url = self.youdao_html_url.format(self.word)
         result = requests.get(url)
 
         self.status_code = result.status_code

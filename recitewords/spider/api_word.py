@@ -24,6 +24,7 @@ class ApiWord():
         self.phonetic = []
         self.speech = []
         self.connect()
+        self.status = False
 
     def connect(self):
         q = self.word
@@ -47,18 +48,20 @@ class ApiWord():
         self.result = response.content.decode()
         import json
         j = json.loads(self.result)
-        j_obj = complex_dict_to_object(j)
-        if j_obj.basic.explains:
-            self.trans = j_obj.basic.explains
-        # if j['errorCode'] == '0' and 'basic' in j.keys():
-        #     if 'explains' in j['basic']:
-        #         self.trans = j["basic"]["explains"]
-        #
-        #     if 'uk-speech' and 'uk-phonetic' in j['basic']:
-        #         self.phonetic.append(['uk-speech', j['basic']['uk-speech']])
-        #
-        #     if 'us-speech' and 'us-phonetic' in j['basic']:
-        #         self.phonetic.append(['us-speech', j['basic']['us-speech']])
+        # j_obj = complex_dict_to_object(j)
+        # if j_obj.basic.explains:
+        #     self.trans = j_obj.basic.explains
+        if j['errorCode'] == '0' and 'basic' in j.keys():
+
+            if 'explains' in j['basic']:
+                self.status = True
+                self.trans = j["basic"]["explains"]
+
+            if 'uk-speech' and 'uk-phonetic' in j['basic']:
+                self.phonetic.append(['uk-speech', j['basic']['uk-speech']])
+
+            if 'us-speech' and 'us-phonetic' in j['basic']:
+                self.phonetic.append(['us-speech', j['basic']['us-speech']])
 
     @staticmethod
     def encrypt(signStr):
@@ -74,6 +77,11 @@ class ApiWord():
         return q if size <= 20 else q[0:10] + str(size) + q[size - 10:size]
 
     @staticmethod
+    def verify_word(word):
+        '''检测单词活词组不包含空格以外的数字或字符'''
+        return word.replace(" ", "").isalpha()
+
+    @staticmethod
     def do_request(data):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         return requests.post(YOUDAO_URL, data=data, headers=headers)
@@ -82,6 +90,6 @@ class ApiWord():
 
 
 if __name__ == '__main__':
-    api = ApiWord('good')
-    print(api.trans)
-
+    api = ApiWord('good at')
+    print(api.result)
+    print(ApiWord.verify_word('asdf a3t'))

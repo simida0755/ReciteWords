@@ -4,5 +4,5 @@ from recitewords.test.views import *
 
 app_name = "test"
 urlpatterns = [
-    path("test/", view=TestView.as_view(), name="test"),
+    path("<word>", view=WordView.as_view(), name="word"),
 ]
