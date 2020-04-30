@@ -7,8 +7,6 @@ import hashlib
 import time
 import importlib
 
-from recitewords.tools.dict_to_obj import complex_dict_to_object
-
 importlib.reload(sys)
 
 
@@ -51,10 +49,10 @@ class ApiWord():
         # j_obj = complex_dict_to_object(j)
         # if j_obj.basic.explains:
         #     self.trans = j_obj.basic.explains
+        print(j)
         if j['errorCode'] == '0' and 'basic' in j.keys():
-
+            print('basic')
             if 'explains' in j['basic']:
-                self.status = True
                 self.trans = j["basic"]["explains"]
 
             if 'uk-speech' and 'uk-phonetic' in j['basic']:
@@ -62,7 +60,6 @@ class ApiWord():
 
             if 'us-speech' and 'us-phonetic' in j['basic']:
                 self.phonetic.append(['us-speech', j['basic']['us-speech']])
-
     @staticmethod
     def encrypt(signStr):
         hash_algorithm = hashlib.sha256()
@@ -90,6 +87,5 @@ class ApiWord():
 
 
 if __name__ == '__main__':
-    api = ApiWord('good at')
-    print(api.result)
-    print(ApiWord.verify_word('asdf a3t'))
+    api = ApiWord('goodss')
+    print(api.status)

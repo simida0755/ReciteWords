@@ -37,7 +37,8 @@ class SpiderWord:
         self.youdao_html_url = YOUDAO_HTML_URL
 
         self.html = ''
-        self.status_code = ''
+        self.status_code = 0
+        self.status = False
         self.soup = ''
 
         self.phrases = []
@@ -53,12 +54,19 @@ class SpiderWord:
         self.status_code = result.status_code
         self.html = result.text
 
-    def parse(self):
-        if self.status_code == 200 and self.html:
-            self.soup = BeautifulSoup(self.html, "lxml")
 
-        self.find_phrases()
-        self.find_centences()
+    def parse(self):
+        self.soup = BeautifulSoup(self.html, "lxml")
+        self.verify_html()
+        if self.status_code == 200 and self.status:
+            self.find_phrases()
+            self.find_centences()
+
+    def verify_html(self):
+        if self.status_code==200:
+            verify_soup = self.soup.select('.error-note')
+            if not verify_soup:
+                self.status = True
 
     def find_phrases(self):
         phrases_soup = self.soup.select('#wordGroup2 > p')
@@ -96,6 +104,6 @@ class SpiderWord:
 
 if __name__=='__main__':
 
-    spider = SpiderWord('lj:good')
-    json_data = json.dumps(spider.centences, ensure_ascii=False)
-    print(json_data)
+    spider = SpiderWord('good')
+    print(spider.status)
+    print(spider.centences)

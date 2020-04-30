@@ -21,23 +21,6 @@ class WordQuerySet(models.query.QuerySet):
 class Trans(Base):
     name = models.CharField('释义', max_length=50)
 
-class Word(Base):
-    name = models.CharField('单词', max_length=50)
-    trans = ForeignKey(Trans,on_delete=models.CASCADE,related_name='trans')
-
-    objects = WordQuerySet.as_manager()
-
-    def get_or_spider(self,word):
-        w =  Word.objects.get(name = word)
-        if w :
-            return w
-        else:
-            html_spider = SpiderWord(word)
-            api_spider = ApiWord(word)
-            if
-
-
-
 class IPA(Base):
     """
     音标分类
@@ -52,7 +35,6 @@ class IPA(Base):
     link = models.CharField('链接',max_length=200)
 
 
-
 class Phrase(Base):
     name = models.CharField('词组', max_length=50)
     trans = models.CharField('释义', max_length=50)
@@ -63,6 +45,30 @@ class Centences(Base):
 
 class Additional(Base):
     name = models.CharField('额外的', max_length=50)
+
+class Word(Base):
+    name = models.CharField('单词', max_length=50)
+
+    objects = WordQuerySet.as_manager()
+
+    def get_or_spider(self,word):
+        w =  Word.objects.get(name = word)
+        if w :
+            return w
+        else:
+            self.spider_add_word(word)
+
+    def spider_add_word(self,word):
+        html_spider = SpiderWord(word)
+        api_word = ApiWord(word)
+        0
+        if html_spider.status:
+            p = Phrase()
+            c = Centences()
+
+
+
+
 
 
 
