@@ -1,10 +1,20 @@
 from django.conf import settings
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken import views
+
+from recitewords.word.views import WordViewSet
+
+router = DefaultRouter()
+
+#配置goods的url
+router.register(r'words', WordViewSet, base_name='words')
 
 urlpatterns = [
+    re_path('^', include(router.urls)),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
@@ -12,7 +22,7 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     # path(settings.ADMIN_URL, admin.site.urls),
     path('test/',include("recitewords.test.urls", namespace='test')),
-
+    path('word/', include("recitewords.word.urls", namespace='word')),
     # User management
     path("users/", include("recitewords.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),

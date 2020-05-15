@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class WordConfig(AppConfig):
-    name = "recitewords.word"
-    verbose_name = _("word")
+    name = "recitewords.word_book"
+    verbose_name = _("word_book")
 
     def ready(self):
         try:

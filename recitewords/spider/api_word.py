@@ -21,8 +21,9 @@ class ApiWord():
         self.trans = []
         self.phonetic = []
         self.speech = []
-        self.connect()
         self.status = False
+        self.connect()
+
 
     def connect(self):
         q = self.word
@@ -51,7 +52,7 @@ class ApiWord():
         #     self.trans = j_obj.basic.explains
         print(j)
         if j['errorCode'] == '0' and 'basic' in j.keys():
-            print('basic')
+            self.status = True
             if 'explains' in j['basic']:
                 self.trans = j["basic"]["explains"]
 
@@ -87,5 +88,7 @@ class ApiWord():
 
 
 if __name__ == '__main__':
-    api = ApiWord('goodss')
+    api = ApiWord('good')
     print(api.status)
+    print(api.trans)
+    print(api.phonetic)

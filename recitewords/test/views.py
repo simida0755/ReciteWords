@@ -7,7 +7,7 @@ class WordView(View):
     def get(self):
         word = self.kwargs['word']
         spider = SpiderWord('lj:good')
-
+        
         import json
         from django.core import serializers
         from django.http import JsonResponse

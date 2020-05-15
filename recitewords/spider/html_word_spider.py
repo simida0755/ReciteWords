@@ -105,5 +105,5 @@ class SpiderWord:
 if __name__=='__main__':
 
     spider = SpiderWord('good')
-    print(spider.status)
+    print(spider.phrases)
     print(spider.centences)

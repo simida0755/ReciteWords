@@ -18,55 +18,130 @@ class WordQuerySet(models.query.QuerySet):
 
             return self.filter(name = word)
 
+
+class Word(Base):
+    name = models.CharField('单词', max_length=50)
+    additional = models.OneToOneField('Additional',null=True,on_delete=models.CASCADE)
+
+    objects = WordQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = "单词"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_or_spider(word):
+        w =  Word.objects.filter(name = word)
+        if w :
+            return w
+        else:
+            return Word.spider_add_word(word)
+
+    @staticmethod
+    def spider_add_word(word):
+        html_spider = SpiderWord(word)
+        api_word = ApiWord(word)
+        if api_word.status and html_spider.status:
+            w = Word()
+            w.name = word
+            w.save()
+            for tran in api_word.trans:
+                t = Trans()
+                t.name = tran
+                t.word = w
+                t.save()
+
+            for ipa in api_word.phonetic:
+                i = IPA()
+                i.name = ipa[0]
+                i.link = ipa[1]
+                i.word = w
+                i.save()
+
+            for phrease in html_spider.phrases:
+                p = Phrase()
+                p.name = phrease[0]
+                p.trans = phrease[1]
+                p.word = w
+                p.save()
+            for centence in html_spider.centences:
+                c = Centences()
+                c.name = centence[0]
+                c.trans = centence[1]
+                c.link = centence[2]
+                c.word = w
+                c.save()
+
+            w = Word.objects.filter(name = word)
+            return w
+
+
+
+
+
+
 class Trans(Base):
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='t_word')
     name = models.CharField('释义', max_length=50)
 
-class IPA(Base):
-    """
-    音标分类
-    """
-    CATEGORY_TYPE = (
-        ('US', "美式"),
-        ('UK', "英式"),
+    class Meta:
+        verbose_name = "释义"
+        verbose_name_plural = verbose_name
 
-    )
+    def __str__(self):
+        return self.name
+
+class IPA(Base):
+
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='i_word')
     name = models.CharField('音标', max_length=50)
-    type = models.CharField('音标类型', choices=CATEGORY_TYPE)
     link = models.CharField('链接',max_length=200)
+
+    class Meta:
+        verbose_name = "音标"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
 
 
 class Phrase(Base):
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='p_word')
     name = models.CharField('词组', max_length=50)
     trans = models.CharField('释义', max_length=50)
 
+    class Meta:
+        verbose_name = "词组"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
 class Centences(Base):
-    name = models.CharField('例句', max_length=50)
-    trans = models.CharField('释义', max_length=50)
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='c_word')
+    name = models.CharField('例句', max_length=200)
+    trans = models.CharField('释义', max_length=100)
+    link = models.CharField('网址',max_length=50)
+
+    class Meta:
+        verbose_name = "例句"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
 
 class Additional(Base):
     name = models.CharField('额外的', max_length=50)
 
-class Word(Base):
-    name = models.CharField('单词', max_length=50)
+    class Meta:
+        verbose_name = "额外的"
+        verbose_name_plural = verbose_name
 
-    objects = WordQuerySet.as_manager()
-
-    def get_or_spider(self,word):
-        w =  Word.objects.get(name = word)
-        if w :
-            return w
-        else:
-            self.spider_add_word(word)
-
-    def spider_add_word(self,word):
-        html_spider = SpiderWord(word)
-        api_word = ApiWord(word)
-        0
-        if html_spider.status:
-            p = Phrase()
-            c = Centences()
-
-
+    def __str__(self):
+        return self.name
 
 
 
