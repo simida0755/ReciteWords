@@ -1,5 +1,7 @@
+from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
 from rest_framework import mixins, viewsets
+from rest_framework.response import Response
 
 from recitewords.word.models import Word
 from recitewords.word.serializers import WordSerializer
@@ -25,3 +27,14 @@ class TestView(View):
 class WordViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = WordSerializer
     queryset = Word.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        # instance = Word.get_or_spider(request['PK'])
+
+        print(kwargs['pk'])
+        instance = Word.get_or_spider(kwargs['pk'])
+        # instance = Word.objects.get(id = kwargs['pk'])
+        # instance = Word.objects.filter(id = kwargs['pk'])
+        # instance = get_object_or_404(Word.objects.all(), **kwargs)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

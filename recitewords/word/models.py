@@ -1,4 +1,5 @@
 from django.db.models import ForeignKey
+from django.http import Http404
 
 from recitewords.base.model import Base
 from django.db import models
@@ -7,23 +8,11 @@ from recitewords.spider.api_word import ApiWord
 from recitewords.spider.html_word_spider import SpiderWord
 
 
-class WordQuerySet(models.query.QuerySet):
-    def get_word(self, word):
-        '''返回查询单词'''
-        if ApiWord.verify_word(word):
-            html_spider = SpiderWord(word)
-            api_spider = ApiWord(word)
-            Word.get_or_spider(word)
-
-
-            return self.filter(name = word)
 
 
 class Word(Base):
-    name = models.CharField('单词', max_length=50)
+    name = models.CharField('单词', max_length=50, db_index=True)
     additional = models.OneToOneField('Additional',null=True,on_delete=models.CASCADE)
-
-    objects = WordQuerySet.as_manager()
 
     class Meta:
         verbose_name = "单词"
@@ -34,10 +23,10 @@ class Word(Base):
 
     @staticmethod
     def get_or_spider(word):
-        w =  Word.objects.filter(name = word)
-        if w :
+        try:
+            w =  Word.objects.get(name = word)
             return w
-        else:
+        except:
             return Word.spider_add_word(word)
 
     @staticmethod
@@ -75,9 +64,9 @@ class Word(Base):
                 c.word = w
                 c.save()
 
-            w = Word.objects.filter(name = word)
+            w = Word.objects.get(name = word)
             return w
-
+        Http404('No %s matches the given word.' % word)
 
 
 

@@ -76,8 +76,9 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "recitewords.users.apps.UsersConfig",
-    "recitewords.test.apps.TestConfig",
-    "recitewords.word.apps.WordConfig"
+    "recitewords.word.apps.WordConfig",
+    "recitewords.word_book.apps.Word_bookConfig",
+
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

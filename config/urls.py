@@ -21,8 +21,7 @@ urlpatterns = [
     ),
     # Django Admin, use {% url 'admin:index' %}
     # path(settings.ADMIN_URL, admin.site.urls),
-    path('test/',include("recitewords.test.urls", namespace='test')),
-    path('word/', include("recitewords.word.urls", namespace='word')),
+    # path('word/', include("recitewords.word.urls", namespace='word')),
     # User management
     path("users/", include("recitewords.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),

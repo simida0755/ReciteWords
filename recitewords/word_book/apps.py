@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
 
 
-class WordConfig(AppConfig):
+class Word_bookConfig(AppConfig):
     name = "recitewords.word_book"
     verbose_name = _("word_book")
 
