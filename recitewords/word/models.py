@@ -66,7 +66,7 @@ class Word(Base):
 
             w = Word.objects.get(name = word)
             return w
-        Http404('No %s matches the given word.' % word)
+        raise Http404('No %s matches the given word.' % word)
 
 
 
@@ -74,7 +74,7 @@ class Word(Base):
 
 class Trans(Base):
     word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='t_word')
-    name = models.CharField('释义', max_length=50)
+    name = models.CharField('释义', max_length=200)
 
     class Meta:
         verbose_name = "释义"
@@ -99,7 +99,7 @@ class IPA(Base):
 
 class Phrase(Base):
     word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='p_word')
-    name = models.CharField('词组', max_length=50)
+    name = models.CharField('词组', max_length=200)
     trans = models.CharField('释义', max_length=50)
 
     class Meta:
