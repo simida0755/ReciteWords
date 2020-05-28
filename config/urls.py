@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
+from rest_framework_jwt.views import obtain_jwt_token
 
 from recitewords.word.views import WordViewSet
 
@@ -14,6 +15,7 @@ router = DefaultRouter()
 router.register(r'words', WordViewSet, base_name='words')
 
 urlpatterns = [
+    path('jwt-auth/', obtain_jwt_token),
     re_path('^', include(router.urls)),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
