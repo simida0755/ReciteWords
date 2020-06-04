@@ -88,7 +88,7 @@ class ApiWord():
 
 
 if __name__ == '__main__':
-    api = ApiWord('good')
+    api = ApiWord('if')
     print(api.status)
     print(api.trans)
     print(api.phonetic)

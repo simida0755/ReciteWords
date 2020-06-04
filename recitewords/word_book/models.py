@@ -8,18 +8,21 @@ from django.db import models
 from recitewords.word.models import Word
 
 # User = get_user_model()
-class WordCount(Base):
-    Word = models.ManyToManyField(Word, related_name='count_word')
-    count = models.IntegerField(default=0 )
+
+
+
+
 
 class WordBook(Base):
     name = models.CharField('名称', max_length=10)
-    word = models.ManyToManyField(Word, related_name='B_word')
     isupload = models.BooleanField('是否记录次数', default=0)
-    word_count = models.ForeignKey(WordCount, null=True, on_delete=models.CASCADE,default='', related_name='w_count')
-
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='', related_name='O_user')
 
+class WordCount(Base):
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='count_word')
+    count = models.IntegerField(default=1 )
+    uploader = models.ForeignKey(settings.AUTH_USER_MODEL, default='',on_delete=models.CASCADE)
+    w_book = models.ForeignKey(WordBook, on_delete=models.CASCADE, default='',related_name='w_count')
 
 class WordOrder(Base):
 
@@ -36,4 +39,5 @@ class WordOrder(Base):
     order = models.IntegerField('顺序', default=1, choices=order_choices)
     sort = models.BooleanField('是否频率', default=1)
     last_word = models.CharField('单词', default='', max_length=50)
+
 

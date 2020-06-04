@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
 from rest_framework import mixins, viewsets
@@ -33,8 +34,7 @@ class WordViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
         print(kwargs['pk'])
         instance = Word.get_or_spider(kwargs['pk'])
-        # instance = Word.objects.get(id = kwargs['pk'])
-        # instance = Word.objects.filter(id = kwargs['pk'])
-        # instance = get_object_or_404(Word.objects.all(), **kwargs)
+        if not instance:
+            return Http404('No %s matches the given word.' % kwargs['pk'])
         serializer = self.get_serializer(instance)
         return Response(serializer.data)

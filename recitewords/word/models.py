@@ -66,7 +66,7 @@ class Word(Base):
 
             w = Word.objects.get(name = word)
             return w
-        raise Http404('No %s matches the given word.' % word)
+
 
 
 

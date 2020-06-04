@@ -39,3 +39,4 @@ class WordSerializer(serializers.ModelSerializer):
         model = Word
         fields = ('name','i_word','t_word','p_word','c_word')
 
+

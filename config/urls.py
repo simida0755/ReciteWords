@@ -8,13 +8,18 @@ from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 
 from recitewords.word.views import WordViewSet
+from recitewords.word_book.views import Word_bookView
 
 router = DefaultRouter()
 
 #配置goods的url
 router.register(r'words', WordViewSet, base_name='words')
 
+# 配置购物车的url
+router.register(r'wordbook', Word_bookView, base_name="wordbook")
+
 urlpatterns = [
+    path('api-auth/', include('rest_framework.urls')),
     path('jwt-auth/', obtain_jwt_token),
     re_path('^', include(router.urls)),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),

@@ -1,41 +1,54 @@
 from rest_framework import serializers
-from .models import Word, IPA, Trans, Phrase, Centences, Additional
+
+from recitewords.spider.github_spider import SpiderGithub
+from recitewords.word.models import Word
+from recitewords.word_book.models import WordBook, WordCount
 
 
-class WordIPASerializer(serializers.ModelSerializer):
+class Word_bookSerializer(serializers.Serializer):
+    #获取当前登录的用户
+    owner = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+    name = serializers.CharField(
+        required=True,max_length=20,min_length=2
+    )
+    url = serializers.CharField(
+        required=True,max_length=500,min_length=5
+    )
+    isupload = serializers.BooleanField(
 
-    class Meta:
-        model = IPA
-        fields = "__all__"
+    )
 
-class WordTranSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Trans
-        fields = "__all__"
+    def create(self, validated_data):
+        print('111111111')
+        name = self.validated_data["name"]
+        owner = self.context["request"].user
+        url = validated_data["url"]
+        isupload = validated_data["isupload"]
+        w_book = WordBook.objects.create(name=name,owner= owner,isupload=isupload)
+        w_book.save()
 
-class WordPhraseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Phrase
-        fields = "__all__"
+        sg = SpiderGithub(url)
 
-class WordCentencesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Centences
-        fields = "__all__"
+        if sg.status == 200:
+            if sg.words:
+                for w in sg.words:
+                    word = Word.get_or_spider(w)
 
-class WordAdditionaleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Additional
-        fields = "__all__"
+                    if word:
+                        w_count = WordCount()
+                        w_count.word = word
+                        w_count.count
+                        w_count.uploader =owner
+                        w_book = WordBook.objects.get(pk = w_book.id)
+                        w_count.w_book = w_book
+                        w_count.save()
 
-class WordSerializer(serializers.ModelSerializer):
+        return w_book
 
-    i_word = WordIPASerializer(many=True)
-    t_word = WordTranSerializer(many=True)
-    p_word = WordPhraseSerializer(many=True)
-    c_word = WordCentencesSerializer(many=True)
-
-    class Meta:
-        model = Word
-        fields = ('name','i_word','t_word','p_word','c_word')
-
+    # def update(self, instance, validated_data):
+    #     # 修改商品数量
+    #     instance.nums = validated_data["nums"]
+    #     instance.save()
+    #     return instance
