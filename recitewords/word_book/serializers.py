@@ -13,7 +13,7 @@ class Word_bookSerializer(serializers.Serializer):
     name = serializers.CharField(
         required=True,max_length=20,min_length=2
     )
-    url = serializers.CharField(
+    url = serializers.CharField(write_only = True,
         required=True,max_length=500,min_length=5
     )
     isupload = serializers.BooleanField(

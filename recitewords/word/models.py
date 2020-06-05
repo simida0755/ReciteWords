@@ -31,6 +31,7 @@ class Word(Base):
 
     @staticmethod
     def spider_add_word(word):
+        print(word)
         html_spider = SpiderWord(word)
         api_word = ApiWord(word)
         if api_word.status and html_spider.status:
@@ -59,6 +60,7 @@ class Word(Base):
             for centence in html_spider.centences:
                 c = Centences()
                 c.name = centence[0]
+                print(len(centence[1]),'--------------------------',centence[1])
                 c.trans = centence[1]
                 c.link = centence[2]
                 c.word = w
@@ -74,7 +76,7 @@ class Word(Base):
 
 class Trans(Base):
     word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='t_word')
-    name = models.CharField('释义', max_length=200)
+    name = models.CharField('释义', max_length=300)
 
     class Meta:
         verbose_name = "释义"
@@ -100,7 +102,7 @@ class IPA(Base):
 class Phrase(Base):
     word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='p_word')
     name = models.CharField('词组', max_length=200)
-    trans = models.CharField('释义', max_length=50)
+    trans = models.CharField('释义', max_length=200)
 
     class Meta:
         verbose_name = "词组"
@@ -112,7 +114,7 @@ class Phrase(Base):
 class Centences(Base):
     word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='c_word')
     name = models.CharField('例句', max_length=200)
-    trans = models.CharField('释义', max_length=100)
+    trans = models.CharField('释义', max_length=3000)
     link = models.CharField('网址',max_length=50)
 
     class Meta:

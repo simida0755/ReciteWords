@@ -104,6 +104,6 @@ class SpiderWord:
 
 if __name__=='__main__':
 
-    spider = SpiderWord('good')
-    print(spider.phrases)
-    print(spider.centences)
+    spider = SpiderWord('try')
+    for centence in spider.centences:
+        print(len(centence[1]),'-------',centence[1])
