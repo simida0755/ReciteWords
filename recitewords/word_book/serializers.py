@@ -2,7 +2,15 @@ from rest_framework import serializers
 
 from recitewords.spider.github_spider import SpiderGithub
 from recitewords.word.models import Word
+from recitewords.word.serializers import WordSerializer
 from recitewords.word_book.models import WordBook, WordCount
+
+
+class WordCountSerializer(serializers.ModelSerializer):
+    word = WordSerializer(read_only=True)
+    class Meta:
+        model = WordCount
+        fields = "__all__"
 
 
 class Word_bookSerializer(serializers.Serializer):
@@ -19,6 +27,7 @@ class Word_bookSerializer(serializers.Serializer):
     isupload = serializers.BooleanField(
 
     )
+    w_count = WordCountSerializer(many = True, read_only=True)
 
     def create(self, validated_data):
         print('111111111')
@@ -52,3 +61,5 @@ class Word_bookSerializer(serializers.Serializer):
     #     instance.nums = validated_data["nums"]
     #     instance.save()
     #     return instance
+
+

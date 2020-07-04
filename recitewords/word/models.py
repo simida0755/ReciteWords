@@ -75,7 +75,7 @@ class Word(Base):
 
 
 class Trans(Base):
-    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='t_word')
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='trans')
     name = models.CharField('释义', max_length=300)
 
     class Meta:
@@ -87,7 +87,7 @@ class Trans(Base):
 
 class IPA(Base):
 
-    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='i_word')
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='IPA')
     name = models.CharField('音标', max_length=50)
     link = models.CharField('链接',max_length=200)
 
@@ -100,7 +100,7 @@ class IPA(Base):
 
 
 class Phrase(Base):
-    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='p_word')
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='phrase')
     name = models.CharField('词组', max_length=200)
     trans = models.CharField('释义', max_length=200)
 
@@ -112,7 +112,7 @@ class Phrase(Base):
         return self.name
 
 class Centences(Base):
-    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='c_word')
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='centences')
     name = models.CharField('例句', max_length=200)
     trans = models.CharField('释义', max_length=3000)
     link = models.CharField('网址',max_length=50)

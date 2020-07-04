@@ -20,7 +20,7 @@ router.register(r'wordbook', Word_bookView, base_name="wordbook")
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
-    path('jwt-auth/', obtain_jwt_token),
+    path('login/', obtain_jwt_token),
     re_path('^', include(router.urls)),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(

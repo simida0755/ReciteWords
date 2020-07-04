@@ -16,13 +16,13 @@ from recitewords.word.models import Word
 class WordBook(Base):
     name = models.CharField('名称', max_length=10)
     isupload = models.BooleanField('是否记录次数', default=0)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='', related_name='O_user')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='', related_name='wordbook')
 
 class WordCount(Base):
-    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='count_word')
+    word = models.ForeignKey(Word,on_delete=models.CASCADE, related_name='wordcount')
     count = models.IntegerField(default=1 )
     uploader = models.ForeignKey(settings.AUTH_USER_MODEL, default='',on_delete=models.CASCADE)
-    w_book = models.ForeignKey(WordBook, on_delete=models.CASCADE, default='',related_name='w_count')
+    w_book = models.ForeignKey(WordBook, on_delete=models.CASCADE, default='',related_name='wordcount')
 
 class WordOrder(Base):
 
@@ -39,5 +39,6 @@ class WordOrder(Base):
     order = models.IntegerField('顺序', default=1, choices=order_choices)
     sort = models.BooleanField('是否频率', default=1)
     last_word = models.CharField('单词', default='', max_length=50)
-
+    wordbook = models.ForeignKey(WordBook, on_delete=models.CASCADE, default='',related_name='wordorder')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='', related_name='wordorder')
 

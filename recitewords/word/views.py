@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from recitewords.word.models import Word
 from recitewords.word.serializers import WordSerializer
@@ -25,9 +26,11 @@ class TestView(View):
             # return HttpResponse('hehe')
 
 
+
 class WordViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = WordSerializer
     queryset = Word.objects.all()
+    authentication_classes = (JSONWebTokenAuthentication,)
 
     def retrieve(self, request, *args, **kwargs):
         # instance = Word.get_or_spider(request['PK'])
@@ -38,3 +41,8 @@ class WordViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             return Http404('No %s matches the given word.' % kwargs['pk'])
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+
+class WordBookViewSet(mixins.RetrieveModelMixin,viewsets.GenericViewSet):
+
+    serializer_class = WordSerializer

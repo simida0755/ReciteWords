@@ -30,13 +30,14 @@ class WordAdditionaleSerializer(serializers.ModelSerializer):
 
 class WordSerializer(serializers.ModelSerializer):
 
-    i_word = WordIPASerializer(many=True)
-    t_word = WordTranSerializer(many=True)
-    p_word = WordPhraseSerializer(many=True)
-    c_word = WordCentencesSerializer(many=True)
+    IPA = WordIPASerializer(many=True)
+    trans = WordTranSerializer(many=True)
+    phrase = WordPhraseSerializer(many=True)
+    centences = WordCentencesSerializer(many=True)
 
     class Meta:
         model = Word
-        fields = ('name','i_word','t_word','p_word','c_word')
+        fields = ('name','IPA','trans','phrase','centences')
+
 
 

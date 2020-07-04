@@ -73,6 +73,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     'rest_framework.authtoken',
     "django_celery_beat",
+    'corsheaders',
 ]
 
 LOCAL_APPS = [
@@ -87,7 +88,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     )
 }
 
@@ -138,6 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -308,3 +309,14 @@ INSTALLED_APPS += ["compressor"]
 STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+import datetime
+
+JWT_AUTH = {
+    'JWT_EXPINRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_HEADERPREFIX': 'JWT',
+}

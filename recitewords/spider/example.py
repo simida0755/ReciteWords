@@ -34,7 +34,7 @@ def do_request(data):
 
 
 def connect():
-    q = "good"
+    q = "bad"
 
     data = {}
     data['from'] = 'en'
@@ -65,6 +65,3 @@ def connect():
 
 if __name__ == '__main__':
     connect()
-    # q = 'qwertyuiopasdfghjklzxcvbnm'
-    # truncate = truncate(q)
-    # print(truncate)
