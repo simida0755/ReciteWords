@@ -15,7 +15,7 @@ Babel==2.7.0
 backcall==0.1.0
 billiard==3.6.1.0
 black==19.3b0
-celery==4.3.0
+celery==5.2.2
 certifi==2019.6.16
 cffi==1.12.3
 channels==2.2.0
